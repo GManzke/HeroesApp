@@ -9,6 +9,16 @@ public class HeroCharacters {
     @SerializedName("name")
     private String name;
 
+    private HeroImage thumbnail;
+
+    public HeroImage getThumbnail() {
+        return thumbnail;
+    }
+
+    public void setThumbnail(HeroImage thumbnail) {
+        this.thumbnail = thumbnail;
+    }
+
     public int getId() {
         return id;
     }

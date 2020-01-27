@@ -1,9 +1,12 @@
 package dev.manzke.heroesapp;
 
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.squareup.picasso.Picasso;
 
 import dev.manzke.heroesapp.Model.HeroModel;
 import retrofit2.Call;
@@ -14,14 +17,17 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
-    private TextView text_test;
+    private TextView textView;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        text_test = findViewById(R.id.text_test);
+        textView = findViewById(R.id.text_test);
+        imageView = findViewById(R.id.image_test);
+
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://gateway.marvel.com:443/v1/public/")
@@ -37,23 +43,28 @@ public class MainActivity extends AppCompatActivity {
             public void onResponse(Call<HeroModel> call, Response<HeroModel> response) {
                 if (!response.isSuccessful()) {
 
-                    text_test.setText("Code: " + response.code() +"\n");
-                    text_test.append("Message: " + response.message());
+                    textView.setText("Code: " + response.code() +"\n");
+                    textView.append("Message: " + response.message());
 
                     return;
                 }
 
                 HeroModel heroModel = response.body();
                 String content = "";
+                String path = "";
                 content += "name: " + heroModel.getHeroConfig().getHeroCharacters().get(0).getName();
+                path = heroModel.getHeroConfig().getHeroCharacters().get(0).getThumbnail().getPath() + "." +
+                        heroModel.getHeroConfig().getHeroCharacters().get(0).getThumbnail().getExtension();
 
-                text_test.append(content);
+                Picasso.get().load("https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg").into(imageView);
+
+                textView.setText(content);
             }
 
             @Override
             public void onFailure(Call<HeroModel> call, Throwable t) {
 
-                text_test.setText(t.getMessage());
+                textView.setText(t.getMessage());
             }
         });
     }
