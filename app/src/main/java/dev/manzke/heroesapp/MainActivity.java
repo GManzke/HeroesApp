@@ -9,6 +9,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.squareup.picasso.Picasso;
 
 import dev.manzke.heroesapp.Model.HeroModel;
+import dev.manzke.heroesapp.Network.APIService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -55,10 +56,12 @@ public class MainActivity extends AppCompatActivity {
                 content += "name: " + heroModel.getHeroConfig().getHeroCharacters().get(0).getName();
                 path = heroModel.getHeroConfig().getHeroCharacters().get(0).getThumbnail().getPath() + "." +
                         heroModel.getHeroConfig().getHeroCharacters().get(0).getThumbnail().getExtension();
+                path = path.replace("http", "https");
 
-                Picasso.get().load("https://i.annihil.us/u/prod/marvel/i/mg/c/e0/535fecbbb9784.jpg").into(imageView);
+                Picasso.get().load(path).into(imageView);
 
                 textView.setText(content);
+
             }
 
             @Override

@@ -1,4 +1,4 @@
-package dev.manzke.heroesapp;
+package dev.manzke.heroesapp.Network;
 
 import dev.manzke.heroesapp.Model.HeroModel;
 import retrofit2.Call;
