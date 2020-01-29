@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = findViewById(R.id.text_test);
-        imageView = findViewById(R.id.image_test);
+        textView = findViewById(R.id.text_name);
+        imageView = findViewById(R.id.image);
 
 
         Retrofit retrofit = new Retrofit.Builder()
