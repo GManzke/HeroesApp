@@ -1,13 +1,16 @@
 package dev.manzke.heroesapp;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.widget.ImageView;
-import android.widget.TextView;
+import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
-import com.squareup.picasso.Picasso;
+import java.util.ArrayList;
 
+import dev.manzke.heroesapp.Model.HeroCharacters;
 import dev.manzke.heroesapp.Model.HeroModel;
 import dev.manzke.heroesapp.Network.APIService;
 import retrofit2.Call;
@@ -16,19 +19,26 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements RecyclerViewAdapter.OnHeroListener {
 
-    private TextView textView;
-    private ImageView imageView;
+    private static final String TAG = "MainActivity";
+
+    private HeroModel heroModel;
+    private ArrayList<String> mImageUrls = new ArrayList<String>();
+    private ArrayList<String> mNames = new ArrayList<String>();
+    private ArrayList<String> mDescription = new ArrayList<String>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        textView = findViewById(R.id.text_name);
-        imageView = findViewById(R.id.image);
+        initImageBitmap();
+    }
 
+    private void initImageBitmap() {
+        Log.e(TAG, "initImageBitmap: called.");
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("https://gateway.marvel.com:443/v1/public/")
@@ -43,32 +53,59 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<HeroModel> call, Response<HeroModel> response) {
                 if (!response.isSuccessful()) {
+                    Log.e(TAG, "OnResponse Error: called.");
 
-                    textView.setText("Code: " + response.code() +"\n");
-                    textView.append("Message: " + response.message());
+                    mImageUrls.add("https://unowp.com/wp-content/uploads/2017/08/white-screen-of-death.png");
+                    mNames.add("Code: " + response.code() +"\n" + "Message: " + response.message());
 
                     return;
                 }
 
-                HeroModel heroModel = response.body();
-                String content = "";
-                String path = "";
-                content += "name: " + heroModel.getHeroConfig().getHeroCharacters().get(0).getName();
-                path = heroModel.getHeroConfig().getHeroCharacters().get(0).getThumbnail().getPath() + "." +
-                        heroModel.getHeroConfig().getHeroCharacters().get(0).getThumbnail().getExtension();
-                path = path.replace("http", "https");
+                heroModel = response.body();
+                Log.e(TAG, "Body sent to heroModel: called.");
 
-                Picasso.get().load(path).into(imageView);
+                for(HeroCharacters character : heroModel.getHeroConfig().getHeroCharacters()){
 
-                textView.setText(content);
+                    String path = character.getThumbnail().getPath() + "." + character.getThumbnail().getExtension();
+                    path = path.replace("http", "https");
+
+                    mImageUrls.add(path);
+                    mNames.add(character.getName());
+                    mDescription.add(character.getDescription());
+
+
+                }
+
+                initRecyclerView();
 
             }
 
             @Override
             public void onFailure(Call<HeroModel> call, Throwable t) {
-
-                textView.setText(t.getMessage());
+                Log.e(TAG, "onFailture: called.");
             }
         });
+
+
+    }
+
+    private void initRecyclerView() {
+        Log.e(TAG, "initRecyclerView: init RecyclerView.");
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view);
+        RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mImageUrls, mNames, this);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+    }
+
+    @Override
+    public void onHeroListener(int position) {
+        Intent intent = new Intent(this, DetailActivity.class);
+        intent.putExtra("image_url", mImageUrls.get(position));
+        intent.putExtra("name", mNames.get(position));
+        intent.putExtra("description", mDescription.get(position));
+
+        startActivity(intent);
+
     }
 }
