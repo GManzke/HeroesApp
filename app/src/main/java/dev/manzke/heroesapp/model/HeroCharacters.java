@@ -1,4 +1,4 @@
-package dev.manzke.heroesapp.Model;
+package dev.manzke.heroesapp.model;
 
 import com.google.gson.annotations.SerializedName;
 

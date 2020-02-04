@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">HeroesApp</string>
+    <string name="image_description">Imagem do herói</string>
+    <string name="nameHolder">Nome</string>
+    <string name="descriptionHolder">Ut fringilla metus ac risus laoreet dapibus. Fusce in lectus est. Nullam convallis efficitur eros eget auctor. Nulla facilisi. Proin vel enim sed dolor malesuada rutrum sed ut metus. Integer vel auctor leo. Vivamus rhoncus tortor tempus, ornare diam at, maximus nulla. Nullam ut imperdiet risus. Donec molestie laoreet ex, sed vestibulum magna aliquet a.</string>
 </resources>

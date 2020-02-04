@@ -10,11 +10,12 @@
         android:id="@+id/image"
         android:layout_width="90dp"
         android:layout_height="90dp"
-        android:src="@mipmap/ic_launcher"/>
+        android:src="@mipmap/ic_launcher"
+        android:contentDescription="@string/image_description"/>
 
     <TextView
         android:id="@+id/text_name"
-        android:text="Teste"
+        android:text="@string/nameHolder"
         android:textSize="26sp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

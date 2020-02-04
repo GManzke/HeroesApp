@@ -5,14 +5,15 @@ import android.os.Bundle;
 import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import dev.manzke.heroesapp.Model.HeroCharacters;
-import dev.manzke.heroesapp.Model.HeroModel;
-import dev.manzke.heroesapp.Network.APIService;
+import dev.manzke.heroesapp.model.HeroCharacters;
+import dev.manzke.heroesapp.model.HeroModel;
+import dev.manzke.heroesapp.network.APIService;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -24,15 +25,18 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private static final String TAG = "MainActivity";
 
     private HeroModel heroModel;
-    private ArrayList<String> mImageUrls = new ArrayList<String>();
-    private ArrayList<String> mNames = new ArrayList<String>();
-    private ArrayList<String> mDescription = new ArrayList<String>();
+    private final ArrayList<String> mImageUrls = new ArrayList<String>();
+    private final ArrayList<String> mNames = new ArrayList<String>();
+    private final ArrayList<String> mDescription = new ArrayList<String>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 
         initImageBitmap();
     }
@@ -47,7 +51,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
         APIService apiService = retrofit.create(APIService.class);
 
-        Call<HeroModel> call = apiService.getHeroes();
+        Call<HeroModel> call = apiService.getHeroes("100", "-name");
 
         call.enqueue(new Callback<HeroModel>() {
             @Override
