@@ -3,6 +3,8 @@ package dev.manzke.heroesapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -28,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
     private final ArrayList<String> mImageUrls = new ArrayList<String>();
     private final ArrayList<String> mNames = new ArrayList<String>();
     private final ArrayList<String> mDescription = new ArrayList<String>();
+    private ProgressBar progressBar;
 
 
     @Override
@@ -36,9 +39,15 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         setContentView(R.layout.activity_main);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
+
+        progressBar = findViewById(R.id.progress_bar);
+
+        progressBar.setVisibility(View.VISIBLE);
+
         setSupportActionBar(toolbar);
 
         initImageBitmap();
+
     }
 
     private void initImageBitmap() {
@@ -61,6 +70,7 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
 
                     mImageUrls.add("https://unowp.com/wp-content/uploads/2017/08/white-screen-of-death.png");
                     mNames.add("Code: " + response.code() +"\n" + "Message: " + response.message());
+
 
                     return;
                 }
@@ -100,6 +110,9 @@ public class MainActivity extends AppCompatActivity implements RecyclerViewAdapt
         RecyclerViewAdapter adapter = new RecyclerViewAdapter(this, mImageUrls, mNames, this);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        progressBar.setVisibility(View.GONE);
+
     }
 
     @Override
